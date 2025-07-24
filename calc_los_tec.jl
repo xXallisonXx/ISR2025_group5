@@ -5,12 +5,14 @@ function make_tec_df(filename)
 
     beam_ids = read(fid["BeamCodes"])[1, :]
     timestamp = read(fid["Time/UnixTime"]) .|> unix2datetime
-    range = read(fid["FittedParams/Range"])
+    # range = read(fid["FittedParams/Range"])
+    # use altitude to calculate VTEC. Should just scale result by sin(elevation)
+    alt = read(fid["FittedParams/Altitude"])
     Ne = read(fid["FittedParams/Ne"]) .± read(fid["FittedParams/dNe"])
 
     close(fid)
 
-    cell_height = diff(range, dims=1)
+    cell_height = diff(alt, dims=1)
     # Bad solution to make cell_height the same shape as range
     # Shouldn't matter because all of the values in cell height should be the same (?)
     cell_height = [cell_height[1, :]'; cell_height]
