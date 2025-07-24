@@ -15,12 +15,12 @@ el = Dict("64016" => 90, "64157" => 77.5, "64964" => 66.09, "65066" => 65.56)
 
 code_lut = Dict("lp" => "Long Pulse", "ac" => "Alternating Code")
 it_lut = Dict(
-    "1min" => "1 minute",
-    "3min" => "3 minute",
-    "5min" => "5 minute",
-    "10min" => "10 minute",
-    "15min" => "15 minute",
-    "20min" => "20 minute"
+    "1min" => "1 Minute",
+    "3min" => "3 Minute",
+    "5min" => "5 Minute",
+    "10min" => "10 Minute",
+    "15min" => "15 Minute",
+    "20min" => "20 Minute"
 )
 
 tecdf = unstack(fulldf, [:starttime, :pulse_code, :integration_time], :beam_id, :TEC)
@@ -32,7 +32,21 @@ using Dates
 
 for df in groupdf
     plot(
-        [plot(df.starttime, df[!, "$bc.0tec"], yerr=df[!, "$bc.0dtec"], dpi=300, label=false, title="beamcode=$bc az=$(az[bc])° el=$(el[bc])°", xticks=(tticks, tticks_label), xlabel="Time (UT)", ylabel="VTEC (TECU)", size=(960, 720), ylims=(0, 20)) for bc in beamcodes]..., suptitle="$(code_lut[df.pulse_code[1]]) $(it_lut[df.integration_time[1]]) Integtration", left_margin=5mm, right_margin=5mm
+        [plot(
+            df.starttime,
+            df[!, "$bc.0tec"],
+            yerr=df[!, "$bc.0dtec"],
+            dpi=300,
+            label=false,
+            title="beamcode=$bc az=$(az[bc])° el=$(el[bc])°",
+            xticks=(tticks, tticks_label),
+            xlabel="Time on 2025-07-22 (UT)",
+            ylabel="VTEC (TECU)",
+            size=(960, 720),
+            ylims=(0, 20)
+        ) for bc in beamcodes]...,
+        suptitle="$(code_lut[df.pulse_code[1]]) $(it_lut[df.integration_time[1]]) Integtration",
+        left_margin=5mm, right_margin=5mm
     )
     savefig("figs/$(df.pulse_code[1])_$(df.integration_time[1]).png")
 end
