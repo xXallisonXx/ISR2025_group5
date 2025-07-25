@@ -22,6 +22,6 @@ elticks = np.arange(20.0, 90.0, 10.0)
 ax.set_rticks(np.cos(elticks * np.pi / 180.0))
 ax.set_yticklabels([str(int(el)) + "\N{DEGREE SIGN}" for el in elticks])
 
-ax.scatter(az * np.pi / 180.0, np.cos(el * np.pi / 180.0), s=75)
+ax.scatter(az * np.pi / 180.0, np.cos(el * np.pi / 180.0), s=75, c="red")
 
 plt.savefig("figs/beam_plot.png", dpi=300)
